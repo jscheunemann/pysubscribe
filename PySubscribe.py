@@ -1,4 +1,4 @@
-# Copyright (C) 2009 - 2020 Jason Scheunemann <jason.scheunemann@gmail.com>.
+# Copyright (C) 2009 - 2021 Jason Scheunemann <jason.scheunemann@gmail.com>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,7 +41,12 @@ class PySubscribe:
 
         for listener in self.__listeners:
             if listener['event'] == event:
-                listener['callback'](**kwargs)
+                if kwargs.__len__() == 0:
+                    listener['callback']()
+                elif kwargs.__len__() == 1:
+                    listener['callback'](kwargs[list(kwargs.keys())[0]])
+                else:
+                    listener['callback'](**kwargs)
 
     def add_event_listener(self, event, callback):
         """Return object added to listeners if not aleady registered, else None.
